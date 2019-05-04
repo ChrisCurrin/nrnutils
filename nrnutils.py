@@ -2,6 +2,9 @@
 Wrapper classes to make working with NEURON easier.
 
 Author: Andrew P. Davison, UNIC, CNRS
+
+Edited by Christopher B. Currin to represent objects in string format for consistent hashing.
+
 """
 
 __version__ = "0.3.1"
@@ -22,7 +25,7 @@ def stringify(cls):
     """
 
     def __str__(self):
-        props = vars(self).keys()
+        props = list(vars(self).keys())
         if hasattr(self, '__strprops__'):
             props += cls.__strprops__
         key_val = []
