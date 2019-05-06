@@ -3,7 +3,7 @@ Wrapper classes to make working with NEURON easier.
 
 Author: Andrew P. Davison, UNIC, CNRS
 
-Edited by Christopher B. Currin to represent objects in string format for consistent hashing.
+Edited by Christopher B. Currin to represent objects in string format for consistent hashing. 
 
 """
 
@@ -33,6 +33,8 @@ def stringify(cls):
             value = getattr(self, key, '_')
             if type(value) is list:
                 value = '[' + ','.join('%s' % v for v in value) + ']'
+            elif type(value) is type(h):
+                continue
             key_val.append('%s=%s' % (key, value))
         return '%s(%s)' % (type(self).__name__, ', '.join(key_val))
 

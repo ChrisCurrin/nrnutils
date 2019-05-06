@@ -1,3 +1,4 @@
 __pycache__
 nrnutils.egg-info
 *.pyc
+build/
