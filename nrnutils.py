@@ -17,6 +17,17 @@ PROXIMAL = 0
 DISTAL = 1
 
 
+def str_ignore_h(value):
+    if type(value) is list:
+        value = '[' + ','.join('%s' % str_ignore_h(v) for v in value) + ']'
+    elif type(value) is dict:
+        value = '{' + ', '.join("'%s': %s" % (k, str_ignore_h(v)) for k, v in value.items()) + '}'
+    elif type(value) is type(h):
+        value = str(value)
+        value = value[:value.find('[')]
+    return value
+
+
 def stringify(cls):
     """
      Decorator for a class to return it's variables as a string.
@@ -28,13 +39,16 @@ def stringify(cls):
         props = list(vars(self).keys())
         if hasattr(self, '__strprops__'):
             props += cls.__strprops__
+        if hasattr(self, '__strpropsignore__'):
+            for prop in cls.__strpropsignore__:
+                if prop in props:
+                    props.remove(prop)
         key_val = []
         for key in props:
-            value = getattr(self, key, '_')
-            if type(value) is list:
-                value = '[' + ','.join('%s' % v for v in value) + ']'
-            elif type(value) is type(h):
+            if key.startswith('_'):
                 continue
+            value = getattr(self, key, '_')
+            value = str_ignore_h(value)
             key_val.append('%s=%s' % (key, value))
         return '%s(%s)' % (type(self).__name__, ', '.join(key_val))
 
